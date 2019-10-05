@@ -1,1 +1,1 @@
-# newsScraper
+# ReactReadingListApp
