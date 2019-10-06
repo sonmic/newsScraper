@@ -33,13 +33,24 @@ class News extends Component {
       .catch(err => console.log(err));
   };
 
+  setFavorite = (id, favorited) => {
+    API.setFavorite(id, favorited)
+      .then(res => this.loadNews())
+      .catch(err => console.log(err));
+  };
+
   render() {
     return (
       <div>
         {this.state.news.length ? (
           <div class="cardContainer">
             {this.state.news.map(news => (
-              <NewsCard key={news._id} news={news} />
+              <NewsCard
+                key={news._id}
+                news={news}
+                onDelete={this.deleteNews}
+                onSetFavorite={this.setFavorite}
+              />
             ))}
           </div>
         ) : (

@@ -10,8 +10,11 @@ export default {
     return axios.get("/api/news/" + id);
   },
   // Deletes the book with the given id
-  deleteBook: function(id) {
+  deleteNews: function(id) {
     return axios.delete("/api/news/" + id);
+  },
+  setFavorite: function(id, favorited) {
+    return axios.put("/api/news/" + id, { favorited });
   },
   // Saves a book to the database
   saveBook: function(bookData) {

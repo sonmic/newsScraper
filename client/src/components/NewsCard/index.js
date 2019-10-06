@@ -10,9 +10,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import CloseIcon from "@material-ui/icons/Close";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
+import API from "../../utils/API";
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -35,16 +37,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NewsCard(props) {
-  const { news } = props;
+  const { news, onDelete, onSetFavorite } = props;
   const classes = useStyles();
-  const { title, pubdate, link, pic, summary, _id } = news;
+  const { title, pubdate, link, pic, summary, _id, favorited } = news;
 
   return (
     <Card className={classes.card}>
       <CardHeader
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
+          <IconButton aria-label="delete">
+            <CloseIcon onClick={() => onDelete(_id)} />
           </IconButton>
         }
         title={
@@ -61,8 +63,11 @@ export default function NewsCard(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton
+          aria-label="add to favorites"
+          onClick={() => onSetFavorite(_id, !favorited)}
+        >
+          <FavoriteIcon color={favorited ? "secondary" : "inherit"} />
         </IconButton>
         <IconButton aria-label="share">
           <ShareIcon />

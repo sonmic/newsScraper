@@ -6,7 +6,8 @@ const scrapedDataSchema = new Schema({
   link: { type: String, required: true },
   pic: { type: String, required: true },
   summary: { type: String, required: true },
-  pubdate: { type: String, required: true }
+  pubdate: { type: String, required: true },
+  favorited: { type: Boolean, required: true }
 });
 
 const scrapedData = mongoose.model("scrapedData", scrapedDataSchema);

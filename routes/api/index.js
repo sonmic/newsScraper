@@ -21,6 +21,32 @@ router.route("/all").get(function(req, res) {
     .catch(err => res.status(422).json(err));
 });
 
+router.delete("/news/:id", function(req, res) {
+  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  db.scrapedData
+    .remove({ _id: req.params.id })
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
+
+router.put("/news/:id", function(req, res) {
+  db.scrapedData
+    .updateOne(
+      { _id: req.params.id },
+      { $set: { favorited: req.body.favorited } }
+    )
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
+
 // Scrape data from one site and place it into the mongodb db
 router.route("/scrape").get(function(req, res) {
   // Make a request via axios for the news section of `ycombinator`
@@ -65,7 +91,8 @@ router.route("/scrape").get(function(req, res) {
               title, //Same as title: title (ES6 Syntax) when the key/value names match
               summary,
               link,
-              pic
+              pic,
+              favorited: false
             })
             .then(inserted => console.log(inserted))
             .catch(err => res.status(422).json(err));
