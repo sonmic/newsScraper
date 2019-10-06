@@ -40,23 +40,26 @@ class News extends Component {
   };
 
   render() {
+    const { favoriteOnly } = this.props;
     return (
-      <div>
+      <Container>
         {this.state.news.length ? (
-          <div class="cardContainer">
-            {this.state.news.map(news => (
-              <NewsCard
-                key={news._id}
-                news={news}
-                onDelete={this.deleteNews}
-                onSetFavorite={this.setFavorite}
-              />
-            ))}
+          <div className="cardContainer">
+            {this.state.news
+              .filter(news => (favoriteOnly ? news.favorited : true))
+              .map(news => (
+                <NewsCard
+                  key={news._id}
+                  news={news}
+                  onDelete={this.deleteNews}
+                  onSetFavorite={this.setFavorite}
+                />
+              ))}
           </div>
         ) : (
           <h3>No Results to Display</h3>
         )}
-      </div>
+      </Container>
     );
   }
 }

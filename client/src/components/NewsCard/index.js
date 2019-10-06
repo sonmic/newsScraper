@@ -45,8 +45,8 @@ export default function NewsCard(props) {
     <Card className={classes.card}>
       <CardHeader
         action={
-          <IconButton aria-label="delete">
-            <CloseIcon onClick={() => onDelete(_id)} />
+          <IconButton aria-label="delete" onClick={() => onDelete(_id)}>
+            <CloseIcon />
           </IconButton>
         }
         title={
