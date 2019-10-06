@@ -49,6 +49,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function NewsAppBar({
   onRefresh,
+  onDelete,
   favoriteOnly,
   setFavoriteOnly
 }) {
@@ -66,10 +67,10 @@ export default function NewsAppBar({
             <IconButton onClick={() => setFavoriteOnly(!favoriteOnly)}>
               <FavoriteIcon color={favoriteOnly ? "secondary" : "inherit"} />
             </IconButton>
-            <IconButton>
-              <RefreshIcon onClick={onRefresh} />
+            <IconButton onClick={onRefresh}>
+              <RefreshIcon />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={onDelete}>
               <DeleteForeverIcon />
             </IconButton>
           </div>

@@ -19,5 +19,7 @@ export default {
   // Saves a book to the database
   saveBook: function(bookData) {
     return axios.post("/api/news", bookData);
-  }
+  },
+  scrape: () => axios.get("/api/scrape"),
+  deleteAll: () => axios.delete("/api/news")
 };

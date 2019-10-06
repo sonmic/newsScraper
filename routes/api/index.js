@@ -17,6 +17,7 @@ router.route("/all").get(function(req, res) {
   // Find all results from the scrapedData collection in the db
   db.scrapedData
     .find({})
+    .sort({ createdAt: "desc" })
     .then(dbModel => res.json(dbModel))
     .catch(err => res.status(422).json(err));
 });
@@ -25,6 +26,17 @@ router.delete("/news/:id", function(req, res) {
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
   db.scrapedData
     .remove({ _id: req.params.id })
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
+
+router.delete("/news", function(req, res) {
+  db.scrapedData
+    .remove({})
     .then(function(dbArticle) {
       res.json(dbArticle);
     })
@@ -56,6 +68,7 @@ router.route("/scrape").get(function(req, res) {
       // Load the html body from axios into cheerio
       var $ = cheerio.load(response.data);
       // For each element with a "title" class
+      const createdAt = new Date();
       $("div.full-item").each(function(i, element) {
         // Save the text and href of each link enclosed in the current element
         var pubdate = $(element)
@@ -86,22 +99,28 @@ router.route("/scrape").get(function(req, res) {
         if (title && link && pic && summary) {
           // Insert the data in the scrapedData db
           db.scrapedData
-            .create({
-              pubdate,
-              title, //Same as title: title (ES6 Syntax) when the key/value names match
-              summary,
-              link,
-              pic,
-              favorited: false
-            })
+            .findOneAndUpdate(
+              { link },
+              {
+                pubdate,
+                title, //Same as title: title (ES6 Syntax) when the key/value names match
+                summary,
+                link,
+                pic,
+                favorited: false,
+                $setOnInsert: {
+                  createdAt
+                }
+              },
+              { upsert: true }
+            )
             .then(inserted => console.log(inserted))
             .catch(err => res.status(422).json(err));
         }
       });
+      // Send a "Scrape Complete" message to the browser
+      res.send("Scrape Complete");
     });
-
-  // Send a "Scrape Complete" message to the browser
-  res.send("Scrape Complete");
 });
 
 module.exports = router;
